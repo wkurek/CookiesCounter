@@ -1,23 +1,63 @@
-# Cookies Counter :cookie:
+# Cookies Counter 🍪
 
-## Task :page_with_curl:
+## Treść zadania :page_with_curl:
+
 Nauczycielka w przedszkolu chce rozdać ciastka dzieciom w swojej grupie. Dzieci siedzą w linii obok siebie (i nie zmieniąją tych pozycji). Każde dziecko ma przypisaną ocenę Si, gdzie i należy do przedziału (1, 2, ..., n) zgodnie z wynikiem testu umiejetności. Nauczycielka chce dać każdemu dziecki co najmniej jedno ciestko. Jeśli dzieci siedzą obok siebie, dziecko z wyższą oceną musi dostać więcej ciastek niż z niższą oceną. Nauczycielka ma ograniczony budżet, więc chce rozdać jak najmniej ciastek. Zaproponuj algorytm, który zwróci najmniejszą liczbę ciastek, które musi rozdać nauczycielka.
 
-## Algorithm :pencil2:
-Jeśli liczba dzieci jest mniejsza lub równa 0 to minimalna liczba ciastek zawsze wynosi 0.
-Jeżeli jest jedno dziecko, to minimalna liczba ciastek wynosi 1.
+## Algorytm ✏
 
-Jeżeli jest więcej niż dwoje dzieci to rozpatrujemy każde dziecko po kolei za każdym razem uwzględniając stosunek ocen sąsiadów do oceny dziecka, które rozpatrujemy. W ogólności ocena sąsiada może być: mniejsza, taka sama lub większa. Możliwe konfiguracje grupujemy w następujący sposób:
-1.	Rozpatrujemy pierwsze dziecko
-    - Jeżeli ocena pierwszego dziecka jest większa od oceny drugiego dziecka to aby uzyskać liczbę ciastek tego dziecka należy obliczyć ilość ciastek drugiego dziecka i dodać do niej 1.
-    - W pozostałych przypadkach liczba ciastek pierwszego dziecka wynosić będzie 1.
-2. Rozpatrujemy ostatnie dziecko
-    - Jeżeli ocena ostatniego dziecka jest większa od oceny przedostatniego dziecka to aby otrzymać liczbę ciastek tego dziecka do liczby ciastek przedostatniego dziecka dodajemy 1.
-    - W pozostałych przypadkach liczba ciastek ostatniego dziecka wynosić będzie 1.
-3. W pozostałych przypadkach (takich, w których istnieje poprzednie i następne dziecko)
-    - Jeżeli ocena rozpatrywanego dziecka jest większa od obu sąsiadów to musimy obliczyć ilość ciastek następnego dziecka. Następnie bierzemy liczbę ciastek sąsiada posiadającego więcej ciastek i dodajemy do niej 1.
-    - Jeżeli ocena rozpatrywanego dziecka jest większa od oceny następnego dziecka i rozpatrywane dziecko ma co najmniej taką samą ocenę jak poprzednie dziecko to musimy obliczyć ilość ciastek następnego dziecka. Liczbą ciastek rozpatrywanego dziecka jest liczba ciastek następnego dziecka powiększona o 1.
-    - Jeżeli ocena rozpatrywanego dziecka jest co najwyżej taka sama jak ocena następnego dziecka i rozpatrywane dziecko ma większą ocenę od poprzedniego dziecka to liczbą ciastek rozpatrywanego dziecka jest liczba ciastek poprzedniego dziecka powiększona o 1.
-    - W pozostałych przypadkach liczba ciastek rozpatrywanego dziecka wynosi 1.
+Algorytm zakłada, że na początku zostanie utworzona kolekcja, w której będą przechowane indeksy uczniów, dla których nie można było wyznaczyć liczby ciastek bez znajomości liczby ciastek następnego ucznia.
+Istnieje tablica, w której przechowywana jest liczba ciastek przyporządkowana danemu uczniowi. Przeglądamy od początku oceny kolejnych uczniów i na ich podstawie przypisujemy kolejnym uczniom liczbę ciastek jeśli jest to możliwe.
 
- Liczbę ciastek dla każdego dziecka liczymy zawsze tylko raz. Jeżeli w którymś kroku algorytmu zachodzi potrzeba obliczenia ilości ciastek następnego dziecka to ta liczba jest zapisywana i nie będzie liczona w kolejnych iteracjach.
+- Jeśli rozpatrujemy pierwszego ucznia i ma on ocenę mniejszą lub równą kolejnemu uczniowi to jego liczba ciastek wynosi: 1.
+- Jeśli rozpatrujemy ostatniego ucznia i ma on ocenę większą od przedostatniego ucznia to jego liczba ciastek wynosi: liczba ciastek przedostatniego ucznia + 1.
+- Jeśli ocena ucznia jest mniejsza od ocen obu sąsiadów to liczba ciastek wynosi: 1.
+- Jeśli ocena ucznia jest większa od poprzednika i niewiększa od następnika to liczba ciastek wynosi: liczba ciastek poprzednika + 1.
+
+Przypisanie nie będzie możliwe w następujących przypadkach:
+
+- Rozważamy pierwszego ucznia i ma on większą ocenę niż drugi uczeń.
+- Rozważamy ucznia mającego poprzednika i następnika.
+  - Uczeń ma większą ocenę niż poprzednik i większa ocenę niż następnik.
+  - Uczeń ma mniejszą ocenę niż poprzednik i większą ocenę niż następnik.
+
+Następnie rozważamy uczniów, dla których nie zostały przydzielone ciastka – ich indeksy są przechowywane w kolekcji. Przeglądamy kolekcję od końca (uczeń z największym indeksem na początku).
+
+- Jeśli indeks jest równy 0 (pierwszy uczeń) to przypisujemy mu ilość ciastek równą: ilości ciastek następnego dziecka + 1.
+- Dla ucznia z oceną większą od sąsiadów przypisujemy liczbę ciastek równą:
+  MAX z liczby ciastek sąsiadów + 1.
+- Dla ucznia z oceną mniejsza niż poprzednik i większą niż następnik przypisujemy liczbę ciastek równą: liczba ciastek następnika + 1.
+
+## Tryby wykonania ▶
+
+Są trzy tryby wykonania definiowane poprzez parametr uruchomieniowy `-m`. Parametr może przjmować wartość 1, 2 lub 3. Poniżej opisane są kolejne tryby wykonania z liczą porządkową związaną z tym trybem wykonania.
+
+#### 1. Rozwiązanie problemu zdefiniowanego w strumieniu wejściowym
+
+W tym trybie dane problemu (oceny kolejnych uczniów) pobierane są ze standardowego strumienia wejścia.
+Dane powinny być w formacie: `1, 2, 5, 4, 6`.
+
+```sh
+$ java -jar ./Cookies.jar -m 1 < sample_data.txt > result.txt
+```
+
+#### 2. Generacja i rozwiązanie problemu
+
+W tym trybie wykonania program sam generuje problem o zdefiniowanej przez paramter `-n` wielkości a następnie go rozwiązuje.
+
+```sh
+$ java -jar ./Cookies.jar -m 2 -n 6
+```
+
+#### 3. Testowanie z pomiarem czasu
+
+Tryb wykonania, który służy do testowania wraz z pomiarem czasu. Dane testowe są definiowane przez następujące parametry:
+
+- `-n` początkowa wielkość problemu
+- `-k` liczba testowanych wielkości problemu
+- `-step` krok, czyli wartość o jaką zwiększa się rozmiar kolejnych testowanych wielkości problemów
+- `-r` ilość badanych instancji danej wielkości problemu
+
+```sh
+$ java -jar ./Cookies.jar -m 3 -n 600000 -k 30 -step 5000 -r 50 > result.txt
+```
