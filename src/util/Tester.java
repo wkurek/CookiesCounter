@@ -34,7 +34,7 @@ public class Tester {
 
         @Override
         public String toString() {
-            return String.format(Locale.US, "n=%d\tt(n)=%d\tq(n)=%.2f",
+            return String.format(Locale.US, "n=%d\tt(n)=%d\t\tq(n)=%.2f",
                     problemSize, time, factor);
         }
     }
@@ -110,8 +110,9 @@ public class Tester {
     }
 
     private void wormUp(CookiesCounter cookiesCounter) {
+        int median = getMedian();
         for(int i = 0; i < 10; ++i) {
-            getProblemAverageTime(cookiesCounter, n);
+            getProblemAverageTime(cookiesCounter, median);
         }
     }
 }
