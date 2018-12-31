@@ -3,6 +3,7 @@ import algorithm.LinearCookiesCounter;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import util.Generator;
+import util.Parser;
 import util.Tester;
 import util.argument.GenerationArguments;
 import util.argument.ModeArguments;
@@ -20,7 +21,11 @@ public class Main {
                     .addObject(modeArguments)
                     .build();
 
-            commander.parse(Arrays.copyOfRange(args, 0, 2));
+            if(args.length < 2) {
+                commander.parse(args);
+            } else {
+                commander.parse(Arrays.copyOfRange(args, 0, 2));
+            }
 
             if(modeArguments.help) {
                 commander.usage();
@@ -28,8 +33,14 @@ public class Main {
             }
 
             if(modeArguments.executionMode == 1) {
-                //read data from standard input
-                System.out.println("mode 1");
+                try {
+                    GradesArray gradesArray = Parser.parse(System.in);
+                    int cookiesNumber = new LinearCookiesCounter().countCookies(gradesArray);
+                    System.out.print(cookiesNumber);
+
+                } catch (Exception e) {
+                    System.err.println("Problem data must be in format: 1, 2, 5, 3");
+                }
             } else if (modeArguments.executionMode == 2) {
                 GenerationArguments generationArguments = new GenerationArguments();
                 JCommander.newBuilder()

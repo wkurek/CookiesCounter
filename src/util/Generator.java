@@ -5,7 +5,7 @@ import algorithm.GradesArray;
 import java.util.Random;
 
 public class Generator {
-    private static final int GRADES_NUMBER = 6;
+    public static final int GRADES_NUMBER = 6;
     private static final int RANDOM_SEED = 41;
 
     private static Generator generator;

@@ -3,7 +3,6 @@ package util.argument;
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.validators.PositiveInteger;
 
 public class ModeArguments {
     public static class ModeInteger implements IParameterValidator {
